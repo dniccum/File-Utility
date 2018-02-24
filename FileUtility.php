@@ -37,7 +37,11 @@ class FileUtility {
         $this->filePath = $filePath;
         $this->sections = [];
 
-        $this->setSections();
+        try {
+            $this->setSections();
+        } catch (Exception $e) {
+            return exit('Exception: ' .$e->getMessage());
+        }
 
         fclose($this->file);
     }
@@ -116,11 +120,13 @@ class FileUtility {
 
     /**
      * Builds the file's sections
-     *
+     * @throws Exception
      * @return void
      */
     private function setSections() {
         $runningSection = new Section();
+
+        $sectionNames = [];
 
         while (($line = fgets($this->file)) !== false) {
             $firstCharacter = substr($line,0, 1);
@@ -132,6 +138,13 @@ class FileUtility {
 
                 $runningSection = new Section();
                 $runningSection->setName($line);
+
+                // validates to make sure no duplicate section names exist
+                if (in_array($runningSection->sectionName, $sectionNames)) {
+                    throw new Exception("A duplicate section name of '{$runningSection->sectionName}' was found.");
+                } else {
+                    array_push($sectionNames, $runningSection->sectionName);
+                }
             } else {
                 // removes unknown tabs/characters
                 $line = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $line);
