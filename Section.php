@@ -57,6 +57,7 @@ class Section
      * Adds a new line
      *
      * @param string $line
+     * @throws Exception
      * @return void
      */
     public function newLine($line)
@@ -64,6 +65,15 @@ class Section
         $cleanedLine = new SectionLine($line);
 
         if ($cleanedLine->key) {
+
+            // validates to make sure that there are no duplicate keys
+            foreach ($this->sectionLines as $line) {
+                if ($line->key == $cleanedLine->key) {
+                    throw new Exception("A duplicate line key of '{$cleanedLine->key}' was found.");
+                    break;
+                }
+            }
+
             array_push($this->sectionLines, $cleanedLine);
         }
     }
