@@ -13,4 +13,6 @@ $file = new FileUtility('content.txt');
 
 $file->setSectionValue('meta data', 'description', 'This is a very basic description that totally makes sense.');
 
+$file->printValue('meta data', 'description');
+
 $file->setSectionHeader('trailer', 'footer');
