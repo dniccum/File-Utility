@@ -29,6 +29,7 @@ class FileUtility {
      * FileParse constructor.
      *
      * @param string $filePath
+     * @return void
      */
     function __construct($filePath)
     {
@@ -40,7 +41,7 @@ class FileUtility {
         try {
             $this->setSections();
         } catch (Exception $e) {
-            return exit('Exception: ' .$e->getMessage());
+            exit('Exception: ' .$e->getMessage());
         }
 
         fclose($this->file);
